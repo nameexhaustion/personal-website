@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 export default () => (
   <Box sx={{ flexGrow: 1 }}>
-    <AppBar color="primary" position="static">
+    <AppBar color="primary" position="fixed">
       <Toolbar>
         <IconButton
           size="large"
