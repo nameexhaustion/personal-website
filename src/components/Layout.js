@@ -2,7 +2,7 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 
-export default (props) => {
+const Layout = (props) => {
   const L = styled('main')(({ theme }) => ({
     display: 'flex',
     justifyContent: 'center',
@@ -37,3 +37,5 @@ export default (props) => {
     </L>
   );
 };
+
+export default Layout;
