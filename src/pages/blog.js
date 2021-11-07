@@ -1,22 +1,23 @@
 import * as React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import TopAppBar from '../components/TopAppBar';
 import Layout from '../components/Layout';
-import { Typography, Box, Paper } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import { Link } from 'gatsby-theme-material-ui';
 
 const BlogPost = ({ title, description, date, name }) => {
   return (
     <Box marginBottom={2} key={`${title}${date}`}>
-      <Paper sx={{ padding: 2 }}>
-        <Box marginBottom={1}>
-          <Typography variant="h6">
-            <Link to={`/blog/${name}`}>{title}</Link>
-          </Typography>
-          <Typography variant="caption">{date}</Typography>
-        </Box>
-        <Typography>{description}</Typography>
-      </Paper>
+      <Link underline="hover" to={`/blog/${name}`}>
+        <Paper sx={{ padding: 2, minHeight: '144px' }}>
+          <Box marginBottom={1}>
+            <Typography variant="h6">{title}</Typography>
+            <Typography variant="caption">{date}</Typography>
+          </Box>
+          <Typography>{description}</Typography>
+        </Paper>
+      </Link>
     </Box>
   );
 };
@@ -49,20 +50,17 @@ const Blog = () => {
   );
 
   return (
-    <>
-      <TopAppBar />
-      <Layout>
-        <div>
-          <Typography variant="h4" textAlign="center">
-            Blog
-          </Typography>
-          <Typography variant="subtitle1" textAlign="center">
-            I write about stuff here
-          </Typography>
-        </div>
-        <div>{posts}</div>
-      </Layout>
-    </>
+    <Layout>
+      <div>
+        <Typography variant="h4" textAlign="center">
+          Blog
+        </Typography>
+        <Typography variant="subtitle1" textAlign="center">
+          I write about stuff here
+        </Typography>
+      </div>
+      <div>{posts}</div>
+    </Layout>
   );
 };
 

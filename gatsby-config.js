@@ -5,7 +5,14 @@ module.exports = {
   },
   plugins: [
     'gatsby-theme-material-ui',
-    'gatsby-plugin-mdx',
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        defaultLayouts: {
+          default: require.resolve('./src/components/BlogPostLayout.js'),
+        },
+      },
+    },
     {
       resolve: 'gatsby-source-filesystem',
       options: {

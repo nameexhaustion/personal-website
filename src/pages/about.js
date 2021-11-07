@@ -1,7 +1,7 @@
 import * as React from 'react';
-import TopAppBar from '../components/TopAppBar';
 import Layout from '../components/Layout';
-import { Box, Typography, Divider } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import ProfilePicture from '../images/profile.png';
 
@@ -45,32 +45,35 @@ const AboutMe = () => {
     return <I src={ProfilePicture} />;
   };
 
+  const Divide = styled(Divider)(({ theme }) => ({
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
+  }));
+
   return (
     <A>
       <L>
         <Picture />
         <Typography variant="h6">Simon Lin</Typography>
       </L>
-      <Divider orientation="vertical" flexItem />
+      <Divide orientation="vertical" flexItem />
       <R>Right</R>
     </A>
   );
 };
 
 const Index = () => (
-  <>
-    <TopAppBar />
-    <Layout>
-      <div>
-        <Typography variant="h4" textAlign="center">
-          About Me
-        </Typography>
-      </div>
-      <div>
-        <AboutMe />
-      </div>
-    </Layout>
-  </>
+  <Layout>
+    <div>
+      <Typography variant="h4" textAlign="center">
+        About Me
+      </Typography>
+    </div>
+    <div>
+      <AboutMe />
+    </div>
+  </Layout>
 );
 
 export default Index;
