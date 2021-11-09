@@ -19,47 +19,43 @@ import { Helmet } from 'react-helmet';
 
 import '../style/code.css';
 
+const getChildrenText = (children) => {
+  if (typeof children === 'string') {
+    return children;
+  }
+  if (typeof children === 'object') {
+    if (children.props !== undefined) {
+      return getChildrenText(children.props.children);
+    }
+    let d = '';
+    for (let i = 0; i < children.length; i++) {
+      d += getChildrenText(children[i]);
+    }
+    return d;
+  }
+};
+
 const BlogPostLayout = (props) => {
   const { frontmatter } = props.pageContext;
 
+  const Title = (props) => (
+    <Typography
+      sx={{ marginBottom: 4 }}
+      {...props}
+      id={getChildrenText(props.children)
+        .replaceAll(' ', '-')
+        .replace(/[^0-9A-Z-]+/gi, '')}
+    />
+  );
+
   const components = {
     // https://github.com/VdustR/example-material-ui-mdx/blob/master/src/components.js
-    h1: (() => {
-      const H1 = (props) => (
-        <Typography sx={{ marginBottom: 4 }} {...props} variant="h1" />
-      );
-      return memo(H1);
-    })(),
-    h2: (() => {
-      const H2 = (props) => (
-        <Typography sx={{ marginBottom: 4 }} {...props} variant="h2" />
-      );
-      return memo(H2);
-    })(),
-    h3: (() => {
-      const H3 = (props) => (
-        <Typography sx={{ marginBottom: 4 }} {...props} variant="h3" />
-      );
-      return memo(H3);
-    })(),
-    h4: (() => {
-      const H4 = (props) => (
-        <Typography sx={{ marginBottom: 4 }} {...props} variant="h4" />
-      );
-      return memo(H4);
-    })(),
-    h5: (() => {
-      const H5 = (props) => (
-        <Typography sx={{ marginBottom: 4 }} {...props} variant="h5" />
-      );
-      return memo(H5);
-    })(),
-    h6: (() => {
-      const H6 = (props) => (
-        <Typography sx={{ marginBottom: 4 }} {...props} variant="h6" />
-      );
-      return memo(H6);
-    })(),
+    h1: (props) => <Title {...props} variant="h1" />,
+    h2: (props) => <Title {...props} variant="h2" />,
+    h3: (props) => <Title {...props} variant="h3" />,
+    h4: (props) => <Title {...props} variant="h4" />,
+    h5: (props) => <Title {...props} variant="h5" />,
+    h6: (props) => <Title {...props} variant="h6" />,
     a: (props) => {
       return (
         <a href={props.href} target="_blank" rel="noopener noreferrer">
