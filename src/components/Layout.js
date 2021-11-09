@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -95,16 +95,7 @@ const TopAppBar = () => {
 };
 
 const Layout = (props) => {
-  const L = styled('main')(({ theme }) => ({
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      marginTop: theme.spacing(8),
-    },
-  }));
-
-  const P = styled(Paper)(({ theme }) => ({
+  const Main = styled(Paper)(({ theme }) => ({
     margin: `auto ${theme.spacing(1)}`,
     width: '100%',
     padding: `${theme.spacing(6)} ${theme.spacing(8)}`,
@@ -126,9 +117,14 @@ const Layout = (props) => {
   return (
     <>
       <TopAppBar />
-      <L>
-        <P>{props.children}</P>
-      </L>
+      <Box
+        sx={{
+          display: 'block',
+          width: '100%',
+          height: { xs: '56px', sm: '64px' },
+        }}
+      />
+      <Main>{props.children}</Main>
     </>
   );
 };

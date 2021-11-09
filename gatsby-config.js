@@ -16,6 +16,10 @@ module.exports = {
             resolve: 'gatsby-remark-images',
           },
         ],
+        rehypePlugins: [
+          require('rehype-slug'),
+          [require('rehype-autolink-headings'), { behavior: 'wrap' }],
+        ],
         defaultLayouts: {
           default: require.resolve('./src/components/BlogPostLayout.js'),
         },

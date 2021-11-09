@@ -17,8 +17,9 @@ import TeX from '@matejmazur/react-katex';
 import CodeBlock from './CodeBlock';
 import { Helmet } from 'react-helmet';
 
-import '../style/code.css';
+import '../style/blogpost.css';
 
+/*
 const getChildrenText = (children) => {
   if (typeof children === 'string') {
     return children;
@@ -28,12 +29,13 @@ const getChildrenText = (children) => {
       return getChildrenText(children.props.children);
     }
     let d = '';
-    for (let i = 0; i < children.length; i++) {
-      d += getChildrenText(children[i]);
-    }
+    children.forEach((c) => {
+      d += getChildrenText(c);
+    });
     return d;
   }
 };
+*/
 
 const BlogPostLayout = (props) => {
   const { frontmatter } = props.pageContext;
@@ -42,9 +44,11 @@ const BlogPostLayout = (props) => {
     <Typography
       sx={{ marginBottom: 4 }}
       {...props}
+      /*
       id={getChildrenText(props.children)
         .replaceAll(' ', '-')
         .replace(/[^0-9A-Z-]+/gi, '')}
+        */
     />
   );
 
@@ -54,7 +58,15 @@ const BlogPostLayout = (props) => {
     h2: (props) => <Title {...props} variant="h6" component="h3" />,
     a: (props) => {
       return (
-        <a href={props.href} target="_blank" rel="noopener noreferrer">
+        <a
+          href={props.href}
+          target={
+            props.href.includes('#') && !props.href.includes('https://')
+              ? ''
+              : '_blank'
+          }
+          rel="noopener noreferrer"
+        >
           {props.children}
         </a>
       );

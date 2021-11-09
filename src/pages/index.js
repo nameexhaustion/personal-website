@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { StaticImage } from 'gatsby-plugin-image';
 import { Helmet } from 'react-helmet';
-import TeX from '@matejmazur/react-katex';
 
 const Index = () => (
   <Layout>
