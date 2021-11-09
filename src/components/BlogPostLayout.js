@@ -17,6 +17,8 @@ import TeX from '@matejmazur/react-katex';
 import CodeBlock from './CodeBlock';
 import { Helmet } from 'react-helmet';
 
+import '../style/code.css';
+
 const BlogPostLayout = (props) => {
   const { frontmatter } = props.pageContext;
 
@@ -58,6 +60,13 @@ const BlogPostLayout = (props) => {
       );
       return memo(H6);
     })(),
+    a: (props) => {
+      return (
+        <a href={props.href} target="_blank" rel="noopener noreferrer">
+          {props.children}
+        </a>
+      );
+    },
     strong: (() => {
       const Strong = (props) => <Typography {...props} fontWeight="500" />;
       return memo(Strong);
