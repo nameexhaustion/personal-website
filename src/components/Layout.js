@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Paper from '@mui/material/Paper';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,53 +9,56 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-
+import { Helmet } from 'react-helmet';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/material/styles';
 import { Button, Link } from 'gatsby-theme-material-ui';
+import favicon from '../images/favicon.png';
 
 const TopAppBar = () => {
   const [state, setState] = React.useState(false);
 
-  const ButtonContainer = styled('div')(({ theme }) => ({
-    [theme.breakpoints.down('md')]: {
-      display: 'none',
-    },
-    height: theme.spacing(8),
-    display: 'flex',
-    alignItems: 'stretch',
-    '& > *': {
-      paddingLeft: `${theme.spacing(3)} !important`,
-      paddingRight: `${theme.spacing(3)} !important`,
-    },
-  }));
-
-  const MenuButton = styled(IconButton)(({ theme }) => ({
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('md')]: { display: 'none' },
+  const AppBarLinkButton = styled(Button)(({ theme }) => ({
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
   }));
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <Helmet
+        htmlAttributes={{
+          lang: 'en',
+        }}
+      >
+        <meta charSet="utf-8" />
+        <link rel="icon" href={favicon} />
+      </Helmet>
       <AppBar color="secondary" position="fixed">
         <Toolbar>
-          <MenuButton
+          <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
+            sx={{ marginRight: 2, display: { md: 'none' } }}
             onClick={() => setState(true)}
           >
             <MenuIcon />
-          </MenuButton>
+          </IconButton>
           <Typography variant="h6" component="div" sx={{ mr: 6 }}>
             a website
           </Typography>
-          <ButtonContainer>
-            <Button to="/">Home</Button>
-            <Button to="/blog">Blog</Button>
-            <Button to="/about">About</Button>
-          </ButtonContainer>
+          <Box
+            sx={{
+              height: '64px',
+              display: { xs: 'none', md: 'flex' },
+              alignItems: 'stretch',
+            }}
+          >
+            <AppBarLinkButton to="/">Home</AppBarLinkButton>
+            <AppBarLinkButton to="/blog">Blog</AppBarLinkButton>
+            <AppBarLinkButton to="/about">About</AppBarLinkButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={state} onClose={() => setState(false)}>
@@ -112,7 +115,7 @@ const Layout = (props) => {
       boxShadow: 'none',
     },
     [theme.breakpoints.up('md')]: {
-      marginTop: theme.spacing(6),
+      margin: `${theme.spacing(6)} auto`,
       padding: `${theme.spacing(8)} ${theme.spacing(12)}`,
     },
     '> *': {

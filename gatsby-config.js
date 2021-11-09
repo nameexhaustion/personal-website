@@ -1,16 +1,31 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: 'https://www.yourdomain.tld',
-    title: 'personal-website',
+    siteUrl: 'https://simonlin.netlify.app',
+    title: 'a website',
   },
   plugins: [
+    'gatsby-plugin-react-helmet',
     'gatsby-theme-material-ui',
+    'gatsby-plugin-image',
+    'gatsby-plugin-sharp',
     {
-      resolve: `gatsby-plugin-mdx`,
+      resolve: 'gatsby-plugin-mdx',
       options: {
+        gatsbyRemarkPlugins: [
+          {
+            resolve: 'gatsby-remark-images',
+          },
+        ],
         defaultLayouts: {
           default: require.resolve('./src/components/BlogPostLayout.js'),
         },
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'images',
+        path: `${__dirname}/src/images`,
       },
     },
     {

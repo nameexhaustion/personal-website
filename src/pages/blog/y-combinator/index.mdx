@@ -1,0 +1,41 @@
+---
+title: Understanding the Y combinator
+author: Simon Lin
+description: How you can understand and construct the Y combinator
+date: 2021-11-08T22:28:54.302Z
+update: 2021-11-08T22:28:54.302Z
+tags:
+  - logic
+  - python
+  - javascript
+---
+
+import 'katex/dist/katex.min.css';
+
+The Y combinator, also known as the fixed point combinator, is a function that finds the fixed point of other functions.
+
+##### What are fixed points?
+
+A fixed point of a function is some input that causes the function's output to be the same as the input itself.
+
+For example, for the function <tex>f(x) = x</tex>, all inputs are fixed points, since the function simply returns what it was given.
+Mathematicians have a fancy word for a function that simply returns what it was passed - the "identity" function.
+
+On the other hand, for the function <tex>f(x) = x^2</tex>, the function only has 2 fixed points <tex>x=0</tex> and <tex>x=1</tex>.
+
+For functions that work on numbers (i.e. <tex>f: R\rightarrow R</tex>), you can find a fixed point by solving for <tex>f(x) = x</tex>.
+For example, in the case of <tex>f(x) = x^2</tex>:
+
+```latex
+\begin{align*}
+f(x) &= x^2 = x \\
+x^2 &= x \\
+x^2 - x &= 0 \\
+x(x - 1) &= 0 \\
+x &= 0, 1
+\end{align*}
+```
+
+The idea behind the Y combinator is to find the fixed points of <em>higher order functions</em>.
+Those are functions that take and return functions.
+One of the interesting things that the Y combinator lets you do is to enable recursion in an environment that doesn't natively support it.
