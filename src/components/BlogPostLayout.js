@@ -50,12 +50,8 @@ const BlogPostLayout = (props) => {
 
   const components = {
     // https://github.com/VdustR/example-material-ui-mdx/blob/master/src/components.js
-    h1: (props) => <Title {...props} variant="h1" />,
-    h2: (props) => <Title {...props} variant="h2" />,
-    h3: (props) => <Title {...props} variant="h3" />,
-    h4: (props) => <Title {...props} variant="h4" />,
-    h5: (props) => <Title {...props} variant="h5" />,
-    h6: (props) => <Title {...props} variant="h6" />,
+    h1: (props) => <Title {...props} variant="h5" component="h2" />,
+    h2: (props) => <Title {...props} variant="h6" component="h3" />,
     a: (props) => {
       return (
         <a href={props.href} target="_blank" rel="noopener noreferrer">
@@ -155,7 +151,9 @@ const BlogPostLayout = (props) => {
           All posts
         </Button>
         <div>
-          <Typography variant="h4">{frontmatter.title}</Typography>
+          <Typography variant="h4" component="h1">
+            {frontmatter.title}
+          </Typography>
           <BlogPostSubtitle
             tags={frontmatter.tags}
             author={frontmatter.author}

@@ -19,7 +19,7 @@ import 'katex/dist/katex.min.css'
 
 The Y combinator, also known as the fixed point combinator, is a function that finds the fixed point of other functions.
 
-##### What are fixed points?
+# What are fixed points?
 
 A fixed point of a function is some input that causes the function's output to be the same as the input itself.
 
@@ -45,7 +45,7 @@ The idea behind the Y combinator is to find the fixed points of <em>higher order
 Those are functions that take and return functions.
 One of the interesting things that the Y combinator lets you do is to enable recursion in an environment that doesn't natively support it.
 
-##### The factorial function
+# The factorial function
 
 The factorial function <tex>f(x) = x!</tex> may be implemented recursively in javascript like this:
 
@@ -116,7 +116,7 @@ The result is a recursive factorial function that doesn't call itself, but rathe
 What we saw was that you create a recursive function by calling it with a copy of itself.
 It's actually possible to automate this so that we don't have to explicitly call `factorial` with itself every single time.
 
-##### Automating the act of calling a function with itself
+# Automating the act of calling a function with itself
 
 First, we curry the `factorial` function, and rename it to `create_factorial`:
 
@@ -146,7 +146,7 @@ And so (repeat), `fn` <span style={{color: 'limegreen'}}>"is a function that bin
 
 Since `fn` is the same as `create_factorial`, then the way we use it also has to be the same - by first passing it into itself!
 
-##### Converting `create_factorial` to work with fixed points
+# Converting `create_factorial` to work with fixed points
 
 The next step is trickier, and also quite long to explain.
 We want to make it so that the can in fact "directly call `fn`" inside of the function that `create_factorial` returns like this:
@@ -178,7 +178,7 @@ const S = (v) => create_factorial(S)(v)
 
 We'll allow direct self-reference for now to make it easier to work with.
 
-Here is where fixed-points come in. `S` in the above is actually a fixed-point of the `create_factorial` function (remove <tex>(v)</tex> from both sides):
+Here is where fixed points come in. `S` in the above is actually a fixed point of the `create_factorial` function (remove <tex>(v)</tex> from both sides):
 
 ```latex
 S \xleftrightarrow{} create\_factorial(S)
@@ -295,7 +295,7 @@ factorial(7) // = 5040
 So now, for any function in the same format as our previous factorial function, `Z(f)` enables recursion for it.
 Specifically, `Z(f)` finds the <em>fixed point</em> of the function.
 
-##### The Z combinator
+# The Z combinator
 
 The `Z` we have above is actually named the Z combinator, which is a form of the Y combinator adapted to work with eagerly evaluated languages.
 To see this, it helps to know some python - we'll first convert our javascript code to python.
@@ -318,7 +318,7 @@ Z = \lambda f.(\lambda x.f(\lambda v.xxv))(\lambda x.f(\lambda v.xxv))
 
 [You'll find the exact same statement on the wikipedia page](https://en.wikipedia.org/wiki/Fixed-point_combinator#Strict_fixed-point_combinator).
 
-##### The Y combinator
+# The Y combinator
 
 Finally, the Y combinator is a more "relaxed" Z combinator that doesn't explicitly define the extra <tex>\lambda v</tex> in the body:
 
@@ -326,7 +326,7 @@ Finally, the Y combinator is a more "relaxed" Z combinator that doesn't explicit
 Y = \lambda f.(\lambda x.f(xx))(\lambda x.f(xx))
 ```
 
-##### Conclusion
+# Conclusion
 
 Hopefully, my explanation of the Y combinator was clear to follow and understand.
 The Y combinator doesn't have much (if any) practical application in today's world,

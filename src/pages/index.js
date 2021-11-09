@@ -13,7 +13,7 @@ const Index = () => (
       <meta name="description" content="simon's home on the internet" />
     </Helmet>
     <div>
-      <Typography variant="h4" textAlign="center">
+      <Typography variant="h4" component="h1" textAlign="center">
         Hello
       </Typography>
       <Typography variant="subtitle1" textAlign="center">

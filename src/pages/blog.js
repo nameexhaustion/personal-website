@@ -89,7 +89,7 @@ const Blog = () => {
         />
       </Helmet>
       <div>
-        <Typography variant="h4" textAlign="center">
+        <Typography variant="h4" component="h1" textAlign="center">
           Blog
         </Typography>
         <Typography variant="subtitle1" textAlign="center">

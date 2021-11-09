@@ -131,7 +131,7 @@ const Index = () => (
       <meta name="description" content="about simon lin" />
     </Helmet>
     <div>
-      <Typography variant="h4" textAlign="center">
+      <Typography variant="h4" component="h1" textAlign="center">
         About Me
       </Typography>
     </div>
