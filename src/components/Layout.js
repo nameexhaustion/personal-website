@@ -15,13 +15,13 @@ import { styled } from '@mui/material/styles';
 import { Button, Link } from 'gatsby-theme-material-ui';
 import favicon from '../images/favicon.png';
 
+const AppBarLinkButton = styled(Button)(({ theme }) => ({
+  paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(3),
+}));
+
 const TopAppBar = () => {
   const [state, setState] = React.useState(false);
-
-  const AppBarLinkButton = styled(Button)(({ theme }) => ({
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-  }));
 
   return (
     <Box sx={{ flexGrow: 1 }}>

@@ -1,0 +1,7 @@
+code {
+  background-color: rgb(246, 248, 250);
+}
+
+.katex-display {
+  overflow: auto;
+}

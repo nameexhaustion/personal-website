@@ -21,7 +21,7 @@ module.exports = {
           [require('rehype-autolink-headings'), { behavior: 'wrap' }],
         ],
         defaultLayouts: {
-          default: require.resolve('./src/components/BlogPostLayout.js'),
+          default: require.resolve('./src/components/blog/BlogPostLayout.js'),
         },
       },
     },

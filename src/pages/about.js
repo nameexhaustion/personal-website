@@ -124,7 +124,7 @@ const AboutMe = () => {
   );
 };
 
-const Index = () => (
+const About = () => (
   <Layout>
     <Helmet>
       <title>About</title>
@@ -141,4 +141,4 @@ const Index = () => (
   </Layout>
 );
 
-export default Index;
+export default About;

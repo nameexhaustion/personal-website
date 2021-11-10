@@ -23,10 +23,13 @@ The Y combinator, also known as the fixed point combinator, is a function that f
 
 A fixed point of a function is some input that causes the function's output to be the same as the input itself.
 
-For example, for the function <tex>f(x) = x</tex>, all inputs are fixed points, since the function simply returns what it was given.
-Mathematicians have a fancy word for a function that simply returns what it was passed - the "identity" function.
+In notation, <tex>x</tex> is a fixed point of a function <tex>f</tex> if:
 
-On the other hand, for the function <tex>f(x) = x^2</tex>, the function only has 2 fixed points <tex>x=0</tex> and <tex>x=1</tex>.
+```latex
+f(x) = x
+```
+
+For example, the function <tex>f(x) = x^2</tex> has 2 fixed points: <tex>x=0</tex> and <tex>x=1</tex>.
 
 For functions that work on numbers (i.e. <tex>f: R\rightarrow R</tex>), you can find a fixed point by solving for <tex>f(x) = x</tex>.
 For example, in the case of <tex>f(x) = x^2</tex>:
@@ -59,7 +62,7 @@ function factorial(v) {
   return v * factorial(v - 1)
 }
 
-factorial(7) // = 5040
+console.log(factorial(7)) // 5040
 ```
 
 Now, the challenge is to construct a recursive factorial function without self-reference,
@@ -79,12 +82,8 @@ function factorial(v, fn) {
   return v * fn(v - 1, fn)
 }
 
-factorial(7, factorial) // = 5040
+console.log(factorial(7, factorial)) // 5040
 ```
-
-> Technically, in the above code `factorial` was passed a reference to itself.
-> For a more correct example, you would first create a copy of `factorial` and pass this copy as the second argument.
-> Since the result is the same, I've omitted this for simplicity.
 
 When calling this factorial function, you pass as an additional argument a copy of itself.
 
@@ -92,24 +91,17 @@ How does this work?
 
 Let's think about what the `factorial` function does:
 
-- If <tex>v</tex> is <tex>0</tex>, return <tex>1</tex>
-  - Otherwise, return <tex>v</tex> multiplied by the result of calling `fn` with <tex>v - 1</tex> and a copy of itself
+- If `v` is `0`, return `1`
+  - Otherwise, return `v` multiplied by the result of calling `fn` with `v - 1` and a copy of itself
 
 And what does the `fn` function inside of the `factorial` do?
 
 - It does the same thing as the `factorial` function
 
-If `factorial` returns <tex>v</tex> multiplied by the result of calling `fn` with <tex>v - 1</tex>,
-(until when <tex>v = 0</tex> where it returns <tex>1</tex>),
-and `fn` is supposed to do the exact same thing as `factorial`,
-then for example calling `factorial` with <tex>v = 7</tex> would give you:
+In fact, the `return` statement is equivalent to:
 
-```latex
-\begin{align*}
-7 * (6 * (5 * (4 * (3 * (2 * (1)))))) &= 7 * 6 * 5 * 4 * 3 * 2 * 1 \\
-&= 7! \\
-&= 5040
-\end{align*}
+```javascript
+return v * factorial(v - 1, factorial)
 ```
 
 The result is a recursive factorial function that doesn't call itself, but rather a copy of itself that behaves exactly the same as itself.
@@ -130,27 +122,36 @@ const create_factorial = (fn) => (v) => {
   return v * fn(fn)(v - 1)
 }
 
-const factorial = create_factorial(create_factorial)
+const A = create_factorial(create_factorial)
 
-factorial(7) // = 5040
+console.log(A(7)) // 5040
 ```
 
-Here, `create_factorial` <span style={{color: 'limegreen'}}>"is a function that binds what you pass it to the value `fn`, and then returns another function that contains calls to `fn`."</span>
+To help understand how the above code works, let's write out what `A` evaluates to: `create_factorial` substituted into `fn`:
 
-What we pass `create_factorial` is a copy of itself, since we need the function that it returns to have access to a copy of itself. So `fn` becomes a copy of `create_factorial`.
+```javascript
+const A = (v) => {
+  if (v == 0) {
+    return 1
+  }
 
-Inside of this other function, we see it calling `fn(fn)(v - 1)`. Why the call to `fn(fn)` instead of directly calling `fn` by itself?
+  return v * create_factorial(create_factorial)(v - 1)
+}
+```
 
-Since `fn` is a copy of `create_factorial` it also does the same thing as `create_factorial`.
-And so (repeat), `fn` <span style={{color: 'limegreen'}}>"is a function that binds what you pass it to the value <strike><code>fn</code></strike> <code>fn2</code></span>
-(oops - let's call this one <code>fn2</code>)<span style={{color: 'limegreen'}}>, and then returns another function that contains calls to `fn2`."</span>
+What is `create_factorial(create_factorial)`? It is in fact equivalent to `A`!
+So the `return` statement becomes equivalent to:
 
-Since `fn` is the same as `create_factorial`, then the way we use it also has to be the same - by first passing it into itself!
+```javascript
+return v * A(v - 1)
+```
+
+which is a call `A` itself, giving you a working factorial function.
 
 # Converting `create_factorial` to work with fixed points
 
-The next step is trickier, and also quite long to explain.
-We want to make it so that the can in fact "directly call `fn`" inside of the function that `create_factorial` returns like this:
+The next step is trickier.
+We want to make it so that we can in fact "directly call" `fn` inside of the function that `create_factorial` returns like this:
 
 ```javascript
 return v * fn(v - 1)
@@ -163,69 +164,81 @@ return v * fn(fn)(v - 1)
 ```
 
 Let's reason our way through this. We want to call `create_factorial` with "something" - let's name this `S`.
-`S` needs to be a function that satisfies a certain property:
-
-- Calling `S` with some argument needs to be equivalent to calling the result of calling `create_factorial` with `S` with some argument. i.e.
+We'll also name the result of calling `create_factorial(S)` as `A`:
 
 ```latex
-S(v) \xleftrightarrow{} create\_factorial(S)(v)
+A = create\_factorial(S)
 ```
 
-From here, you can directly construct such an `S` from the above requirement:
+Here is what `A` evaluates to in javascript:
 
 ```javascript
-const S = (v) => create_factorial(S)(v)
+// A = create_factorial(S)
+
+const A = (v) => {
+  if (v == 0) {
+    return 1
+  }
+
+  return v * S(v - 1)
+}
 ```
+
+It looks like `A` would be a valid factorial function if `S = A`:
+
+```latex
+S \xleftrightarrow{} A
+```
+
+And so we have:
+
+```latex
+S(v) \xleftrightarrow{} A(v) \xleftrightarrow{} factorial(v)
+```
+
+In fact, `S` in the above is actually a fixed point of the `create_factorial` function.
+This is the idea behind the Y combinator - enabling recursion through indirect self-reference by using a fixed point.
 
 We'll allow direct self-reference for now to make it easier to work with.
-
-Here is where fixed points come in. `S` in the above is actually a fixed point of the `create_factorial` function (remove <tex>(v)</tex> from both sides):
-
-```latex
-S \xleftrightarrow{} create\_factorial(S)
-```
-
-This is why calling `S` is equivalent to calling the result of calling `create_factorial` with `S`.
-
-While the above is perfectly valid (it works), we're going to change it up a little.
-The reason being that the Y combinator (although equivalent to the above) is worded slightly differently from what we have here in a way that's not too obvious.
-This time, we'll use a slightly different angle:
-
-- Calling `create_factorial` with "something" gives us a function. We'll once again name this "something" `S`
-- `S` needs to call create_factorial with another "something" - we'll name this other "something" `T`
-- `T` needs to be a function that satisfies a certain property:
-  - Calling `T` with some argument needs to be equivalent to calling `S` with some argument
-  - In other words, `T` can simply be a function that calls `S`.
-
-You may notice how this is a continuation from before that goes 1 more step into the recursion.
-
-Once again, we construct `S`, this time with `T`:
+According to the above equivalence, `A` should call `create_factorial` with itself:
 
 ```javascript
-const T = (v) => S(v)
-const S = create_factorial(T)
+const A = create_factorial(A)
 
-// i.e.
-const S = create_factorial((v) => S(v))
+// ReferenceError: Cannot access 'A' before initialization
 ```
 
-You may wonder why `T` doesn't directly call `S`, i.e. `const T = S(v)`, or `const S = create_factorial(S(v))`.
-The is because when javascript tries to evaluate what the value of `S` is, it will call `create_factorial` with `S(v)`,
-which calls `S` with `v`, which then again calls `create_factorial` with `S(v)` and so on.. leading to an infinite loop.
-Evaluating an expression immediately like this is known as "[eager evaluation](https://www.google.com/search?q=eager+vs+lazy+evaluation)".
+Except that it doesn't work, because javascript (and most programming languages) immediately evaluate expressions.
+When reaching the above line, javascript will try to evaluate what `A` is.
+Since `A = create_factorial(A)`, it will then to evaluate `create_factorial(A)`, however this won't work
+because `A` has not yet been defined.
+This is known as [eager evaluation](https://www.google.com/search?q=eager+vs+lazy+evaluation).
 
-Currently, our definition of `S` makes use of self-reference, and our next step is to get rid of that.
-We've already seen how to do this with the create_factorial function, and this is no different.
-
-First, we'll curry `S`, and replace all calls to `S` from inside itself with `fn(fn)`:
+To get around this, we wrap the the argument for `create_factorial` in a closure:
 
 ```javascript
-const S = (fn) => {
+const A = create_factorial((v) => A(v))
+```
+
+Here `S = (v) => A(v)`.
+You can see how this is valid since calling `S` with some number `v` is equivalent to calling `A` with `v`.
+Now, when javascript evaluates the statement, `create_factorial` is called with a function `(v) => A(v)`.
+The content of this function is only evaluated when it is called, at which point `A` will have been defined.
+
+# Completely removing self reference
+
+Currently, our definition of `A` makes use of self-reference, and our next step is to get rid of that.
+We've saw earlier how to do this with the `create_factorial` function, and this is no different.
+
+First, we'll curry `A`, and replace all calls to `A` from inside itself with `fn(fn)`:
+
+```javascript
+const A = (fn) => {
   return create_factorial((v) => fn(fn)(v))
 }
 ```
 
-To finish, we call `S` with itself, and check the result:
+To finish, we call `A` with itself so that `fn = A`, and check the result:
 
 ```javascript
 const create_factorial = (fn) => (v) => {
@@ -236,13 +249,13 @@ const create_factorial = (fn) => (v) => {
   return v * fn(v - 1)
 }
 
-const S = (fn) => {
+const A = (fn) => {
   return create_factorial((v) => fn(fn)(v))
 }
 
-const F = S(S)
+const F = A(A)
 
-F(7) // = 5040
+console.log(F(7)) // 5040
 ```
 
 It works! We've successfully replaced the call to `fn(fn)` with a call to `fn`.
@@ -250,7 +263,9 @@ It works! We've successfully replaced the call to `fn(fn)` with a call to `fn`.
 This is a lot of effort to change a minor thing - we could have stuck with using `fn(fn)` and saved ourselves the trouble.
 However, what this lets us do is to directly derive to Y combinator, which is now only a few formatting steps away.
 
-First, we convert variable names (`fn` to `x` and `S` to `Z`) and convert to an arrow function:
+# Deriving the Y combinator
+
+First, we convert variable names (`fn` to `x` and `A` to `Z`) and convert to an arrow function:
 
 ```javascript
 const Z = (x) => create_factorial((v) => x(x)(v))
@@ -269,7 +284,7 @@ The above is `((x) => create_factorial((v) => x(x)(v)))` repeated twice.
 The first one for the function definition, the second one for the argument we call it with.
 In this case we're calling it with a copy of itself.
 
-Finally, instead of only working on the `create_factorial` function, we curry this and replace `create_factorial` with the argument `f` so that we can pass it any function:
+Finally, instead of only working on the `create_factorial` function, we curry this and replace `create_factorial` with an argument `f` so that we can pass it any function:
 
 ```javascript
 const Z = (f) => ((x) => f((v) => x(x)(v)))((x) => f((v) => x(x)(v)))
@@ -290,11 +305,15 @@ const Z = (f) => ((x) => f((v) => x(x)(v)))((x) => f((v) => x(x)(v)))
 
 const factorial = Z(create_factorial)
 
-factorial(7) // = 5040
+console.log(factorial(7)) // 5040
 ```
 
 So now, for any function in the same format as our previous factorial function, `Z(f)` enables recursion for it.
-Specifically, `Z(f)` finds the <em>fixed point</em> of the function.
+Specifically, `Z(f)` gives you the <em>fixed point</em> of the function. i.e.
+
+```latex
+Z(f) \xleftrightarrow{} f(Z(f))
+```
 
 # The Z combinator
 
@@ -321,7 +340,8 @@ Z = \lambda f.(\lambda x.f(\lambda v.xxv))(\lambda x.f(\lambda v.xxv))
 
 # The Y combinator
 
-Finally, the Y combinator is a more "relaxed" Z combinator that doesn't explicitly define the extra <tex>\lambda v</tex> in the body:
+Finally, the [Y combinator](https://en.wikipedia.org/wiki/Fixed-point_combinator#Y_combinator)
+is a more "relaxed" Z combinator that doesn't explicitly define the extra <tex>\lambda v</tex> in the body:
 
 ```latex
 Y = \lambda f.(\lambda x.f(xx))(\lambda x.f(xx))
@@ -331,7 +351,7 @@ Y = \lambda f.(\lambda x.f(xx))(\lambda x.f(xx))
 
 Hopefully, my explanation of the Y combinator was clear to follow and understand.
 The Y combinator doesn't have much (if any) practical application in today's world,
-but trying to understand it is good practice for logical thinking.
+but trying to understand it can be good exercise for logical thinking.
 
 The Y combinator is somewhat similar to in feel to topics such as the
 [diagonal lemma](https://en.wikipedia.org/wiki/Diagonal_lemma),

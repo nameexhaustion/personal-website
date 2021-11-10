@@ -2,44 +2,9 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import Layout from '../components/Layout';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import { Link } from 'gatsby-theme-material-ui';
 import { Helmet } from 'react-helmet';
 
-import BlogPostSubtitle from '../components/BlogPostSubtitle';
-
-const BlogPost = ({
-  title,
-  author,
-  description,
-  date,
-  update,
-  path,
-  tags,
-  key,
-}) => {
-  return (
-    <Box marginBottom={2} key={key}>
-      <Paper sx={{ padding: 2 }}>
-        <Box marginBottom={1}>
-          <Typography variant="h6">
-            <Link underline="hover" to={`/blog/${path}`}>
-              {title}
-            </Link>
-          </Typography>
-          <BlogPostSubtitle
-            tags={tags}
-            author={author}
-            date={date}
-            update={update}
-          />
-        </Box>
-        <Typography>{description}</Typography>
-      </Paper>
-    </Box>
-  );
-};
+import BlogPostCard from '../components/blog/BlogPostCard';
 
 const Blog = () => {
   const data = useStaticQuery(graphql`
@@ -71,7 +36,7 @@ const Blog = () => {
     (n, i) =>
       n !==
       posts.push(
-        BlogPost({
+        BlogPostCard({
           ...n.childMdx.frontmatter,
           path: n.relativeDirectory,
           key: i,
