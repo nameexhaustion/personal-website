@@ -67,13 +67,13 @@ const Blog = () => {
 
   const posts = [];
 
-  data['allFile']['nodes'].forEach(
+  data.allFile.nodes.forEach(
     (n, i) =>
       n !==
       posts.push(
         BlogPost({
-          ...n['childMdx']['frontmatter'],
-          path: n['relativeDirectory'],
+          ...n.childMdx.frontmatter,
+          path: n.relativeDirectory,
           key: i,
         })
       )

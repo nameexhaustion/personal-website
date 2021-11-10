@@ -8,6 +8,15 @@ h6 > a {
   text-decoration: none;
 }
 
+h1 > a:hover,
+h2 > a:hover,
+h3 > a:hover,
+h4 > a:hover,
+h5 > a:hover,
+h6 > a:hover {
+  text-decoration: underline;
+}
+
 h1::before,
 h2::before,
 h3::before,

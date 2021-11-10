@@ -19,38 +19,10 @@ import { Helmet } from 'react-helmet';
 
 import '../style/blogpost.css';
 
-/*
-const getChildrenText = (children) => {
-  if (typeof children === 'string') {
-    return children;
-  }
-  if (typeof children === 'object') {
-    if (children.props !== undefined) {
-      return getChildrenText(children.props.children);
-    }
-    let d = '';
-    children.forEach((c) => {
-      d += getChildrenText(c);
-    });
-    return d;
-  }
-};
-*/
-
 const BlogPostLayout = (props) => {
   const { frontmatter } = props.pageContext;
 
-  const Title = (props) => (
-    <Typography
-      sx={{ marginBottom: 4 }}
-      {...props}
-      /*
-      id={getChildrenText(props.children)
-        .replaceAll(' ', '-')
-        .replace(/[^0-9A-Z-]+/gi, '')}
-        */
-    />
-  );
+  const Title = (props) => <Typography sx={{ marginBottom: 4 }} {...props} />;
 
   const components = {
     // https://github.com/VdustR/example-material-ui-mdx/blob/master/src/components.js

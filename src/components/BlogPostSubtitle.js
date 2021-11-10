@@ -33,7 +33,13 @@ const BlogPostSubtitle = ({ author, date, update, tags }) => {
               display: 'inline-block',
             }}
           >
-            <Chip label={t} variant="outlined" />
+            <Link underline="hover" to={`/tags/${t}`}>
+              <Chip
+                sx={{ '&:hover': { cursor: 'pointer' } }}
+                label={t}
+                variant="outlined"
+              />
+            </Link>
           </Box>
         ))}
       </div>
@@ -43,13 +49,11 @@ const BlogPostSubtitle = ({ author, date, update, tags }) => {
         </Link>{' '}
         · {`${month[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`}
         {(() => {
-          if (update !== null) {
-            if (update !== date) {
-              const d = new Date(update);
-              return ` · Updated ${
-                month[d.getMonth()]
-              } ${d.getDate()}, ${d.getFullYear()}`;
-            }
+          if (update !== date) {
+            const d = new Date(update);
+            return ` · Updated ${
+              month[d.getMonth()]
+            } ${d.getDate()}, ${d.getFullYear()}`;
           }
         })()}
       </Typography>
