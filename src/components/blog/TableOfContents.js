@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -13,6 +13,10 @@ import Toolbar from '@mui/material/Toolbar';
 import { styled } from '@mui/material/styles';
 import { Link } from 'gatsby-theme-material-ui';
 import { slug } from 'github-slugger';
+import store from '../../redux/blogtocstore';
+import { Provider } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setActiveHeading } from '../../redux/blogtocslice';
 
 const TocButton = styled(Fab)(({ theme }) => ({
   position: 'fixed',
@@ -26,6 +30,56 @@ const TocButton = styled(Fab)(({ theme }) => ({
   },
 }));
 
+const TocListItem = ({ id, value, depth }) => {
+  const activeHeading = useSelector((state) => state.activeHeading.payload);
+  const dispatch = useDispatch();
+
+  console.log('aH', id, activeHeading);
+  console.log(id === activeHeading);
+
+  const IOCallback = ([entry]) => {
+    if (entry.isIntersecting) {
+      dispatch(setActiveHeading(id));
+    }
+  };
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver(IOCallback, options);
+
+    const e = document.querySelector(id);
+
+    observer.observe(e);
+
+    return () => {
+      observer.unobserve(e);
+    };
+  }, []);
+
+  return (
+    <Link sx={{ textDecoration: 'none' }} key={id} to={id}>
+      <MenuItem>
+        <ListItemText
+          sx={{
+            whiteSpace: 'initial',
+            '& > *': {
+              fontWeight: id === activeHeading ? '500' : '400',
+            },
+          }}
+          inset={depth === 1 ? false : true}
+        >
+          {value}
+        </ListItemText>
+      </MenuItem>
+    </Link>
+  );
+};
+
 const TocList = ({ headings: h, title }) => {
   const headings = h.map(({ depth, value }) => ({
     depth,
@@ -33,18 +87,9 @@ const TocList = ({ headings: h, title }) => {
     id: `#${slug(value)}`,
   }));
 
-  const Headings = headings.map(({ id, value, depth }) => (
-    <Link sx={{ textDecoration: 'none' }} key={id} to={id}>
-      <MenuItem>
-        <ListItemText
-          sx={{ whiteSpace: 'initial' }}
-          inset={depth === 1 ? false : true}
-        >
-          {value}
-        </ListItemText>
-      </MenuItem>
-    </Link>
-  ));
+  const Headings = headings.map(({ id, value, depth }) =>
+    TocListItem({ id, value, depth })
+  );
 
   return (
     <MenuList sx={{ maxWidth: 320 }} dense>
@@ -64,7 +109,7 @@ const TocDrawer = ({ headings }) => {
   const [state, setState] = React.useState(false);
 
   return (
-    <>
+    <Provider store={store}>
       <TocButton
         color="secondary"
         variant="extended"
@@ -109,7 +154,7 @@ const TocDrawer = ({ headings }) => {
           }
         />
       </StaticDrawer>
-    </>
+    </Provider>
   );
 };
 
