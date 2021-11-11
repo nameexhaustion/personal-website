@@ -15,6 +15,9 @@ import { throttle } from 'lodash';
 import { Link } from 'gatsby-theme-material-ui';
 import { slug } from 'github-slugger';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { setOpen, setClose } from '../../store/blog';
+
 const TocButton = styled(Fab)(({ theme }) => ({
   position: 'fixed',
   top: theme.spacing(8),
@@ -26,20 +29,14 @@ const TocButton = styled(Fab)(({ theme }) => ({
 }));
 
 const TableOfContents = ({ headings: h }) => {
-  const [state, setState] = React.useState(false);
+  const drawerOpen = useSelector((state) => state.drawerOpen);
+  const dispatch = useDispatch();
 
-  const setOpen = (open) => {
-    switch (open) {
-      case true:
-        document.querySelector('#main').classList.add('main-toc-open');
-        setState(true);
-        break;
-      case false:
-        document.querySelector('#main').classList.remove('main-toc-open');
-        setState(false);
-        break;
-    }
-  };
+  if (document.querySelector('#main') !== null) {
+    drawerOpen
+      ? document.querySelector('#main').classList.add('main-toc-open')
+      : document.querySelector('#main').classList.remove('main-toc-open');
+  }
 
   const headings = h.map(({ depth, value }) => ({
     depth,
@@ -58,15 +55,11 @@ const TableOfContents = ({ headings: h }) => {
   ));
 
   useEffect(() => {
-    const callback = throttle(() => {
+    const scroll = throttle(() => {
       let id = headings[0].id;
       let dist = Math.abs(
         document.querySelector(`#${headings[0].id}`).getBoundingClientRect().y
       );
-      for (let i = 0; i < headings.length; i++) {
-        let e = document.querySelector(`#${headings[i].id}`);
-        let d = Math.abs(e.getBoundingClientRect().y);
-      }
       for (let i = 0; i < headings.length; i++) {
         let e = document.querySelector(`#${headings[i].id}`);
         let d = Math.abs(e.getBoundingClientRect().y);
@@ -80,9 +73,30 @@ const TableOfContents = ({ headings: h }) => {
       }
       document.querySelector(`#toc-${id}`).classList.add('active_section');
     }, 200);
-    window.addEventListener('scroll', callback);
+    window.addEventListener('scroll', scroll);
 
-    return () => window.removeEventListener('scroll', callback);
+    const resize = throttle(() => {
+      switch (window.matchMedia('(min-width: 1200px)').matches) {
+        case true:
+          if (!drawerOpen) {
+            dispatch(setOpen());
+          }
+          break;
+        case false:
+          if (drawerOpen) {
+            dispatch(setClose());
+          }
+          break;
+        default:
+          break;
+      }
+    }, 200);
+    window.addEventListener('resize', resize);
+
+    return () => {
+      window.removeEventListener('scroll', scroll);
+      window.removeEventListener('resize', resize);
+    };
   }, [headings]);
 
   return (
@@ -90,7 +104,7 @@ const TableOfContents = ({ headings: h }) => {
       <TocButton
         color="secondary"
         variant="extended"
-        onClick={() => setOpen(true)}
+        onClick={() => dispatch(setOpen())}
       >
         <TocIcon sx={{ mr: 1 }} />
         Contents
@@ -98,12 +112,12 @@ const TableOfContents = ({ headings: h }) => {
       <Drawer
         variant="persistent"
         anchor="right"
-        open={state}
-        onClose={() => setOpen(false)}
+        open={drawerOpen}
+        onClose={() => dispatch(setClose())}
       >
         <Toolbar />
         <MenuList dense>
-          <MenuItem onClick={() => setOpen(false)}>
+          <MenuItem onClick={() => dispatch(setClose())}>
             <Stack sx={{ width: '100%' }} direction="row">
               <Typography sx={{ flexGrow: 1 }} variant="h6">
                 Contents

@@ -15,9 +15,7 @@ code {
 }
 
 @media (min-width: 1200px) {
-  @media (max-width: 1536px) {
-    .main-toc-open {
-      margin-left: calc((100vw - 372px - 900px) / 2) !important;
-    }
+  .main-toc-open {
+    margin-left: calc((100vw - 372px - 900px) / 2) !important;
   }
 }
