@@ -34,9 +34,6 @@ const TocListItem = ({ id, value, depth }) => {
   const activeHeading = useSelector((state) => state.activeHeading.payload);
   const dispatch = useDispatch();
 
-  console.log('aH', id, activeHeading);
-  console.log(id === activeHeading);
-
   const IOCallback = ([entry]) => {
     if (entry.isIntersecting) {
       dispatch(setActiveHeading(id));

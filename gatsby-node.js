@@ -109,7 +109,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
     await Promise.all(
       posts.map(async ({ childMdx: { id, slug } }) => {
-        console.log(`mdx: ${slug} ${id}`);
         createPage({
           path: `/blog/${slug}`,
           component: path.resolve('./src/templates/BlogPost.js'),
