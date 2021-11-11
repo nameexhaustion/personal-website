@@ -1,13 +1,18 @@
 import React from 'react';
-// Components
-import { Link, graphql } from 'gatsby';
+import { graphql } from 'gatsby';
+import Stack from '@mui/material/Stack';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button, Link } from 'gatsby-theme-material-ui';
+import { Helmet } from 'react-helmet';
 import BlogPostCard from '../components/blog/BlogPostCard';
 import Layout from '../components/Layout';
-import Typography from '@mui/material/Typography';
-import { Helmet } from 'react-helmet';
 
 const Tags = ({ pageContext, data }) => {
-  const { tag } = pageContext;
+  const { tag, slug, numPages, currentPage } = pageContext;
 
   const posts = [];
 
@@ -16,8 +21,8 @@ const Tags = ({ pageContext, data }) => {
       n !==
       posts.push(
         BlogPostCard({
-          ...n.childMdx.frontmatter,
-          path: n.relativeDirectory,
+          frontmatter: n.childMdx.frontmatter,
+          slug: n.childMdx.slug,
           key: i,
         })
       )
@@ -26,10 +31,13 @@ const Tags = ({ pageContext, data }) => {
   return (
     <Layout>
       <Helmet>
-        <title>Blog tags</title>
+        <title>{`Tag: ${tag}`}</title>
         <meta name="description" content={`all posts to do with ${tag}`} />
       </Helmet>
       <div>
+        <Button to="/tags" startIcon={<ArrowBackIcon />}>
+          All tags
+        </Button>
         <Typography variant="h4" component="h1" textAlign="center">
           Tag: {tag}
         </Typography>
@@ -38,6 +46,21 @@ const Tags = ({ pageContext, data }) => {
         </Typography>
       </div>
       <div>{posts}</div>
+      <Box display="flex" justifyContent="center">
+        <Stack spacing={2}>
+          <Pagination
+            page={currentPage}
+            count={numPages}
+            renderItem={(item) => (
+              <PaginationItem
+                {...item}
+                component={Link}
+                to={`/tags/${slug}/${item.page === 1 ? '' : item.page}`}
+              />
+            )}
+          />
+        </Stack>
+      </Box>
     </Layout>
   );
 };
@@ -45,7 +68,7 @@ const Tags = ({ pageContext, data }) => {
 export default Tags;
 
 export const pageQuery = graphql`
-  query ($tag: String) {
+  query ($tag: String, $skip: Int!, $limit: Int!) {
     allFile(
       filter: {
         sourceInstanceName: { eq: "blog" }
@@ -53,6 +76,8 @@ export const pageQuery = graphql`
         childMdx: { frontmatter: { tags: { in: [$tag] } } }
       }
       sort: { fields: childMdx___frontmatter___update, order: DESC }
+      limit: $limit
+      skip: $skip
     ) {
       nodes {
         childMdx {
@@ -64,8 +89,8 @@ export const pageQuery = graphql`
             update
             tags
           }
+          slug
         }
-        relativeDirectory
       }
     }
   }

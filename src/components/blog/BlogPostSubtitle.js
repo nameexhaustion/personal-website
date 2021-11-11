@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import { Link } from 'gatsby-theme-material-ui';
+import { kebabCase } from 'lodash';
 
 const BlogPostSubtitle = ({ author, date, update, tags }) => {
   const month = [
@@ -33,7 +34,7 @@ const BlogPostSubtitle = ({ author, date, update, tags }) => {
               display: 'inline-block',
             }}
           >
-            <Link underline="hover" to={`/tags/${t}`}>
+            <Link underline="hover" to={`/tags/${kebabCase(t)}`}>
               <Chip
                 sx={{ '&:hover': { cursor: 'pointer' } }}
                 label={t}

@@ -5,22 +5,14 @@ import Paper from '@mui/material/Paper';
 import { Link } from 'gatsby-theme-material-ui';
 import BlogPostSubtitle from './BlogPostSubtitle';
 
-const BlogPostCard = ({
-  title,
-  author,
-  description,
-  date,
-  update,
-  path,
-  tags,
-  key,
-}) => {
+const BlogPostCard = ({ frontmatter, key, slug }) => {
+  const { title, author, description, date, update, tags } = frontmatter;
   return (
     <Box marginBottom={2} key={key}>
       <Paper sx={{ padding: 2 }}>
         <Box marginBottom={1}>
           <Typography variant="h6">
-            <Link underline="hover" to={`/blog/${path}`}>
+            <Link underline="hover" to={`/blog/${slug}`}>
               {title}
             </Link>
           </Typography>

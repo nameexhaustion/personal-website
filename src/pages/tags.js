@@ -1,11 +1,11 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import Layout from '../components/Layout';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { Link } from 'gatsby-theme-material-ui';
 import { Helmet } from 'react-helmet';
+import Layout from '../components/Layout';
 
 const Tags = () => {
   const data = useStaticQuery(graphql`

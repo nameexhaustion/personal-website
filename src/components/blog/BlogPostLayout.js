@@ -17,6 +17,7 @@ import { MDXProvider } from '@mdx-js/react';
 import TeX from '@matejmazur/react-katex';
 import CodeBlock from './CodeBlock';
 import Layout from '../Layout';
+import 'katex/dist/katex.min.css';
 import '../../style/code.css';
 
 const Title = styled(Typography)(({ theme }) => ({
@@ -36,10 +37,6 @@ const Title = styled(Typography)(({ theme }) => ({
   '& > a:hover': {
     textDecoration: 'underline',
   },
-}));
-
-const Code = styled('code')(() => ({
-  backgroundColor: 'background-color: rgb(246, 248, 250);',
 }));
 
 const components = {
