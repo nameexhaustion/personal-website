@@ -65,6 +65,7 @@ const Index = () => {
       <Box display="flex" justifyContent="center">
         <StaticImage
           src="../images/profile.png"
+          alt="profile"
           placeholder="blurred"
           layout="fixed"
           width={160}

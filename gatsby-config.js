@@ -18,11 +18,13 @@ module.exports = {
         ],
         rehypePlugins: [
           require('rehype-slug'),
-          [require('rehype-autolink-headings'), { behavior: 'wrap' }],
+          [
+            require('rehype-autolink-headings'),
+            {
+              behavior: 'wrap',
+            },
+          ],
         ],
-        defaultLayouts: {
-          default: require.resolve('./src/components/blog/BlogPostLayout.js'),
-        },
       },
     },
     {
@@ -36,7 +38,7 @@ module.exports = {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'blog',
-        path: `${__dirname}/src/pages/blog`,
+        path: `${__dirname}/src/blogposts`,
       },
     },
   ],

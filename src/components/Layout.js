@@ -33,7 +33,7 @@ const TopAppBar = () => {
         <meta charSet="utf-8" />
         <link rel="icon" href={favicon} />
       </Helmet>
-      <AppBar color="secondary" position="fixed">
+      <AppBar color="secondary" position="fixed" id="top-app-bar">
         <Toolbar>
           <IconButton
             size="large"
@@ -124,7 +124,7 @@ const Layout = (props) => {
           height: { xs: '56px', sm: '64px' },
         }}
       />
-      <Main>{props.children}</Main>
+      <Main id="main">{props.children}</Main>
     </>
   );
 };

@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import Typography from '@mui/material/Typography';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
@@ -8,17 +7,10 @@ import MuiTable from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
 import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { Helmet } from 'react-helmet';
-import { Button } from 'gatsby-theme-material-ui';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import BlogPostSubtitle from './BlogPostSubtitle';
-import { MDXProvider } from '@mdx-js/react';
 import TeX from '@matejmazur/react-katex';
 import CodeBlock from './CodeBlock';
-import Layout from '../Layout';
-import 'katex/dist/katex.min.css';
-import '../../style/code.css';
 
 const Title = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(4),
@@ -58,10 +50,9 @@ const components = {
       </a>
     );
   },
-  strong: (() => {
-    const Strong = (props) => <Typography {...props} fontWeight="500" />;
-    return memo(Strong);
-  })(),
+  strong: (props) => (
+    <Typography component="span" {...props} fontWeight="500" />
+  ),
   blockquote: (() => {
     const Blockquote = (props) => (
       <Paper
@@ -137,34 +128,4 @@ const components = {
   tex: (props) => <TeX math={props.children} />,
 };
 
-const BlogPostLayout = (props) => {
-  const { frontmatter } = props.pageContext;
-
-  return (
-    <MDXProvider components={components}>
-      <Helmet>
-        <title>{frontmatter.title}</title>
-        <meta name="description" content={frontmatter.description} />
-      </Helmet>
-      <Layout>
-        <Button to="/blog" startIcon={<ArrowBackIcon />}>
-          All posts
-        </Button>
-        <div>
-          <Typography variant="h4" component="h1">
-            {frontmatter.title}
-          </Typography>
-          <BlogPostSubtitle
-            tags={frontmatter.tags}
-            author={frontmatter.author}
-            date={frontmatter.date}
-            update={frontmatter.update}
-          />
-        </div>
-        {props.children}
-      </Layout>
-    </MDXProvider>
-  );
-};
-
-export default BlogPostLayout;
+export default components;

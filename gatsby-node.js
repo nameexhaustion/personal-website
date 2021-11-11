@@ -1,11 +1,12 @@
 const path = require('path');
-const _ = require('lodash');
+const { kebabCase } = require('lodash');
 
 const postsPerPage = 8;
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
+  const tasks = [];
   const { createPage } = actions;
-  const tagTemplate = path.resolve('src/templates/blogListTags.js');
+  const tagTemplate = path.resolve('src/templates/BlogListTags.js');
   const result = await graphql(`
     {
       tags: allFile(
@@ -15,12 +16,13 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
           fieldValue
         }
       }
-      slug: allFile(
+      allMdx: allFile(
         filter: { sourceInstanceName: { eq: "blog" }, extension: { eq: "mdx" } }
         sort: { fields: childMdx___frontmatter___update, order: DESC }
       ) {
         nodes {
           childMdx {
+            id
             slug
           }
         }
@@ -34,7 +36,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     return;
   }
 
-  {
+  tasks.push(async () => {
     const tags = result.data.tags.group;
 
     await Promise.all(
@@ -61,18 +63,18 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
         const numPages = Math.ceil(posts.length / postsPerPage);
 
-        Array.from({ length: numPages }).forEach((__, i) => {
+        Array.from({ length: numPages }).forEach((_, i) => {
           createPage({
             path:
               i == 0
-                ? `/tags/${_.kebabCase(fieldValue)}/`
-                : `/tags/${_.kebabCase(fieldValue)}/${i + 1}`,
+                ? `/tags/${kebabCase(fieldValue)}/`
+                : `/tags/${kebabCase(fieldValue)}/${i + 1}`,
             component: tagTemplate,
             context: {
               limit: postsPerPage,
               skip: i * postsPerPage,
               tag: fieldValue,
-              slug: _.kebabCase(fieldValue),
+              slug: kebabCase(fieldValue),
               numPages,
               currentPage: i + 1,
             },
@@ -80,17 +82,17 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         });
       })
     );
-  }
+  });
 
-  {
-    const posts = result.data.slug.nodes;
+  tasks.push(async () => {
+    const posts = result.data.allMdx.nodes;
     const numPages = Math.ceil(posts.length / postsPerPage);
 
     await Promise.all(
       Array.from({ length: numPages }).map(async (_, i) => {
         createPage({
           path: i == 0 ? '/blog' : `/blog/${i + 1}`,
-          component: path.resolve('./src/templates/blogList.js'),
+          component: path.resolve('./src/templates/BlogList.js'),
           context: {
             limit: postsPerPage,
             skip: i * postsPerPage,
@@ -100,5 +102,26 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         });
       })
     );
-  }
+  });
+
+  tasks.push(async () => {
+    const posts = result.data.allMdx.nodes;
+
+    await Promise.all(
+      posts.map(async ({ childMdx: { id, slug } }) => {
+        console.log(`mdx: ${slug} ${id}`);
+        createPage({
+          path: `/blog/${slug}`,
+          component: path.resolve('./src/templates/BlogPost.js'),
+          context: { id },
+        });
+      })
+    );
+  });
+
+  await Promise.all(
+    tasks.map(async (t) => {
+      await t();
+    })
+  );
 };
