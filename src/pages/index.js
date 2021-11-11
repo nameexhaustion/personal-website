@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
 import { Button } from 'gatsby-theme-material-ui';
 import BlogPostCard from '../components/blog/BlogPostCard';
-import Layout from '../components/Layout';
+import Layout from '../components/layout/PageLayout';
 
 const Index = () => {
   const data = useStaticQuery(graphql`

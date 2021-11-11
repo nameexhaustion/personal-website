@@ -12,37 +12,33 @@ import BlogPostSubtitle from '../components/blog/BlogPostSubtitle';
 import MDXComponents from '../components/blog/MDXComponents';
 import 'katex/dist/katex.min.css';
 import '../style/blog.css';
-import store from '../store/blog';
-import { Provider } from 'react-redux';
 
 const BlogPost = ({ data: { mdx } }) => {
   return (
-    <Provider store={store}>
-      <MDXProvider components={MDXComponents}>
-        <Helmet>
-          <title>{mdx.frontmatter.title}</title>
-          <meta name="description" content={mdx.frontmatter.description} />
-        </Helmet>
-        <Layout>
-          <TableOfContents headings={mdx.headings} />
-          <Button to="/blog" startIcon={<ArrowBackIcon />}>
-            All posts
-          </Button>
-          <div>
-            <Typography variant="h4" component="h1">
-              {mdx.frontmatter.title}
-            </Typography>
-            <BlogPostSubtitle
-              tags={mdx.frontmatter.tags}
-              author={mdx.frontmatter.author}
-              date={mdx.frontmatter.date}
-              update={mdx.frontmatter.update}
-            />
-          </div>
-          <MDXRenderer>{mdx.body}</MDXRenderer>
-        </Layout>
-      </MDXProvider>
-    </Provider>
+    <MDXProvider components={MDXComponents}>
+      <Helmet>
+        <title>{mdx.frontmatter.title}</title>
+        <meta name="description" content={mdx.frontmatter.description} />
+      </Helmet>
+      <Layout>
+        <TableOfContents headings={mdx.headings} />
+        <Button to="/blog" startIcon={<ArrowBackIcon />}>
+          All posts
+        </Button>
+        <div>
+          <Typography variant="h4" component="h1">
+            {mdx.frontmatter.title}
+          </Typography>
+          <BlogPostSubtitle
+            tags={mdx.frontmatter.tags}
+            author={mdx.frontmatter.author}
+            date={mdx.frontmatter.date}
+            update={mdx.frontmatter.update}
+          />
+        </div>
+        <MDXRenderer>{mdx.body}</MDXRenderer>
+      </Layout>
+    </MDXProvider>
   );
 };
 

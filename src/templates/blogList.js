@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import { Link } from 'gatsby-theme-material-ui';
 import { Helmet } from 'react-helmet';
 
-import Layout from '../components/Layout';
+import Layout from '../components/layout/PageLayout';
 import BlogPostCard from '../components/blog/BlogPostCard';
 
 const Blog = ({ pageContext, data }) => {

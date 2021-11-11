@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from '../components/Layout';
+import Layout from '../components/layout/PageLayout';
 import Typography from '@mui/material/Typography';
 import { Helmet } from 'react-helmet';
 

@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { Link } from 'gatsby-theme-material-ui';
 import { Helmet } from 'react-helmet';
-import Layout from '../components/Layout';
+import Layout from '../components/layout/PageLayout';
 
 const Tags = () => {
   const data = useStaticQuery(graphql`

@@ -9,7 +9,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button, Link } from 'gatsby-theme-material-ui';
 import { Helmet } from 'react-helmet';
 import BlogPostCard from '../components/blog/BlogPostCard';
-import Layout from '../components/Layout';
+import Layout from '../components/layout/PageLayout';
 
 const Tags = ({ pageContext, data }) => {
   const { tag, slug, numPages, currentPage } = pageContext;

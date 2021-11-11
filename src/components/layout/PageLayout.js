@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import TopAppBar from '../layout/TopAppBar';
-import Main from '../layout/Main';
+import TopAppBar from './TopAppBar';
+import Main from './Main';
 import { Helmet } from 'react-helmet';
 import favicon from '../../images/favicon.png';
 
@@ -30,7 +30,7 @@ const PageLayout = (props) => {
         <meta charSet="utf-8" />
         <link rel="icon" href={favicon} />
       </Helmet>
-      <TopAppBar sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} />
+      <TopAppBar />
       <Container>
         <Main>{props.children}</Main>
       </Container>

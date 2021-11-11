@@ -1,5 +1,4 @@
-import * as React from 'react';
-import Paper from '@mui/material/Paper';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,31 +8,21 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { Helmet } from 'react-helmet';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/material/styles';
 import { Button, Link } from 'gatsby-theme-material-ui';
-import favicon from '../images/favicon.png';
 
 const AppBarLinkButton = styled(Button)(({ theme }) => ({
   paddingLeft: theme.spacing(3),
   paddingRight: theme.spacing(3),
 }));
 
-const TopAppBar = () => {
+const TopAppBar = (props) => {
   const [state, setState] = React.useState(false);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Helmet
-        htmlAttributes={{
-          lang: 'en',
-        }}
-      >
-        <meta charSet="utf-8" />
-        <link rel="icon" href={favicon} />
-      </Helmet>
-      <AppBar color="secondary" position="fixed" id="top-app-bar">
+      <AppBar {...props} color="secondary" position="fixed" id="top-app-bar">
         <Toolbar>
           <IconButton
             size="large"
@@ -94,39 +83,4 @@ const TopAppBar = () => {
   );
 };
 
-const Layout = (props) => {
-  const Main = styled(Paper)(({ theme }) => ({
-    margin: `auto ${theme.spacing(1)}`,
-    width: '100%',
-    padding: `${theme.spacing(6)} ${theme.spacing(8)}`,
-    maxWidth: theme.breakpoints.values.md,
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(4),
-      borderRadius: 0,
-      boxShadow: 'none',
-    },
-    [theme.breakpoints.up('md')]: {
-      margin: `${theme.spacing(6)} auto`,
-      padding: `${theme.spacing(8)} ${theme.spacing(12)}`,
-    },
-    '> *': {
-      marginBottom: theme.spacing(4),
-    },
-  }));
-
-  return (
-    <>
-      <TopAppBar />
-      <Box
-        sx={{
-          display: 'block',
-          width: '100%',
-          height: { xs: '56px', sm: '64px' },
-        }}
-      />
-      <Main id="main">{props.children}</Main>
-    </>
-  );
-};
-
-export default Layout;
+export default TopAppBar;

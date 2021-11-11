@@ -5,17 +5,3 @@ code {
 .katex-display {
   overflow: auto;
 }
-
-.active_section > span {
-  font-weight: 500;
-}
-
-#top-app-bar {
-  z-index: 1201;
-}
-
-@media (min-width: 1200px) {
-  .main-toc-open {
-    margin-left: calc((100vw - 372px - 900px) / 2) !important;
-  }
-}
