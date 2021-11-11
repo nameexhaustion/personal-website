@@ -17,6 +17,11 @@ const Container = styled('div')(({ theme }) => ({
       height: theme.spacing(8),
     },
   },
+  [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.down('xl')]: {
+      marginLeft: '320px',
+    },
+  },
 }));
 
 const PageLayout = (props) => {
