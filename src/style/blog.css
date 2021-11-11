@@ -5,3 +5,7 @@ code {
 .katex-display {
   overflow: auto;
 }
+
+#sitenavdrawer {
+  z-index: 1202;
+}

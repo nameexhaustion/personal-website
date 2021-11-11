@@ -50,7 +50,12 @@ const TopAppBar = (props) => {
           </Box>
         </Toolbar>
       </AppBar>
-      <Drawer anchor="left" open={state} onClose={() => setState(false)}>
+      <Drawer
+        id="sitenavdrawer"
+        anchor="left"
+        open={state}
+        onClose={() => setState(false)}
+      >
         <Box
           sx={{ width: 250 }}
           role="presentation"

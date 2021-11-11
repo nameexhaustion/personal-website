@@ -118,7 +118,7 @@ const AboutMe = () => {
           My dream job is to be a software developer
         </Typography>
         <Typography sx={{ marginBottom: 2 }}>
-          I always try to, and really wish I could understand everything
+          I always try to learn more. I never feel like I've learned enough.
         </Typography>
       </Box>
     </A>
