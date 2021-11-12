@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: 'https://www.simonlin.dev',
+    siteUrl: 'https://simonlin.netlify.app',
     title: 'a website',
   },
   plugins: [
