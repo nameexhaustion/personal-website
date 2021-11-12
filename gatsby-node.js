@@ -6,7 +6,6 @@ const postsPerPage = 8;
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const tasks = [];
   const { createPage } = actions;
-  const tagTemplate = path.resolve('src/templates/BlogListTags.js');
   const result = await graphql(`
     {
       tags: allFile(
@@ -36,12 +35,13 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     return;
   }
 
-  tasks.push(async () => {
-    const tags = result.data.tags.group;
+  tasks.push(
+    (async () => {
+      const tags = result.data.tags.group;
 
-    await Promise.all(
-      tags.map(async ({ fieldValue }) => {
-        const result = await graphql(`
+      await Promise.all(
+        tags.map(async ({ fieldValue }) => {
+          const result = await graphql(`
         {
           allFile(
             filter: {
@@ -59,68 +59,69 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         }
         `);
 
-        const posts = result.data.allFile.nodes;
+          const posts = result.data.allFile.nodes;
 
-        const numPages = Math.ceil(posts.length / postsPerPage);
+          const numPages = Math.ceil(posts.length / postsPerPage);
 
-        Array.from({ length: numPages }).forEach((_, i) => {
+          Array.from({ length: numPages }).forEach(async (_, i) => {
+            createPage({
+              path:
+                i == 0
+                  ? `/tags/${kebabCase(fieldValue)}/`
+                  : `/tags/${kebabCase(fieldValue)}/${i + 1}`,
+              component: path.resolve('src/templates/BlogListTags.js'),
+              context: {
+                limit: postsPerPage,
+                skip: i * postsPerPage,
+                tag: fieldValue,
+                slug: kebabCase(fieldValue),
+                numPages,
+                currentPage: i + 1,
+              },
+            });
+          });
+        })
+      );
+    })()
+  );
+
+  tasks.push(
+    (async () => {
+      const posts = result.data.allMdx.nodes;
+      const numPages = Math.ceil(posts.length / postsPerPage);
+
+      await Promise.all(
+        Array.from({ length: numPages }).map(async (_, i) => {
           createPage({
-            path:
-              i == 0
-                ? `/tags/${kebabCase(fieldValue)}/`
-                : `/tags/${kebabCase(fieldValue)}/${i + 1}`,
-            component: tagTemplate,
+            path: i == 0 ? '/blog' : `/blog/${i + 1}`,
+            component: path.resolve('./src/templates/BlogList.js'),
             context: {
               limit: postsPerPage,
               skip: i * postsPerPage,
-              tag: fieldValue,
-              slug: kebabCase(fieldValue),
               numPages,
               currentPage: i + 1,
             },
           });
-        });
-      })
-    );
-  });
-
-  tasks.push(async () => {
-    const posts = result.data.allMdx.nodes;
-    const numPages = Math.ceil(posts.length / postsPerPage);
-
-    await Promise.all(
-      Array.from({ length: numPages }).map(async (_, i) => {
-        createPage({
-          path: i == 0 ? '/blog' : `/blog/${i + 1}`,
-          component: path.resolve('./src/templates/BlogList.js'),
-          context: {
-            limit: postsPerPage,
-            skip: i * postsPerPage,
-            numPages,
-            currentPage: i + 1,
-          },
-        });
-      })
-    );
-  });
-
-  tasks.push(async () => {
-    const posts = result.data.allMdx.nodes;
-
-    await Promise.all(
-      posts.map(async ({ childMdx: { id, slug } }) => {
-        createPage({
-          path: `/blog/${slug}`,
-          component: path.resolve('./src/templates/BlogPost.js'),
-          context: { id },
-        });
-      })
-    );
-  });
-
-  await Promise.all(
-    tasks.map(async (t) => {
-      await t();
-    })
+        })
+      );
+    })()
   );
+
+  tasks.push(
+    (async () => {
+      const posts = result.data.allMdx.nodes;
+
+      await Promise.all(
+        posts.map(async ({ childMdx: { id, slug } }) => {
+          createPage({
+            path: `/blog/${slug}`,
+            component: path.resolve('./src/templates/BlogPost.js'),
+            context: { id },
+          });
+        })
+      );
+    })()
+  );
+
+  await Promise.all(tasks.map((t) => t));
 };

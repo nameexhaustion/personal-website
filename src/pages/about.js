@@ -106,19 +106,19 @@ const AboutMe = () => {
       <Box height="100%" sx={{ flexBasis: { md: '55%' } }}>
         <Typography sx={{ marginBottom: 2 }}>Hello there</Typography>
         <Typography sx={{ marginBottom: 2 }}>
-          I'm someone who writes code and stuff.
+          I'm someone who writes code and stuff
         </Typography>
         <Typography sx={{ marginBottom: 2 }}>
-          I'm interested in technology, math, logic, anime and manga
+          • Interested in technology, math, logic, anime and manga
         </Typography>
         <Typography sx={{ marginBottom: 2 }}>
-          I'm currently self-studying while working a part-time job
+          • Currently self-studying while working a part-time job
         </Typography>
         <Typography sx={{ marginBottom: 2 }}>
-          My dream job is to be a software developer
+          • Dream job is to be a software developer
         </Typography>
         <Typography sx={{ marginBottom: 2 }}>
-          I always try to learn more. I never feel like I've learned enough.
+          • Always trying to learn more, I never feel like I've learned enough
         </Typography>
       </Box>
     </A>

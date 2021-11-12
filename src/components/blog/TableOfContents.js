@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -34,13 +34,13 @@ const TocListItem = ({ id, value, depth }) => {
   const activeHeading = useSelector((state) => state.activeHeading.payload);
   const dispatch = useDispatch();
 
-  const IOCallback = ([entry]) => {
-    if (entry.isIntersecting) {
-      dispatch(setActiveHeading(id));
-    }
-  };
-
   useEffect(() => {
+    const IOCallback = ([entry]) => {
+      if (entry.isIntersecting) {
+        dispatch(setActiveHeading(id));
+      }
+    };
+
     const options = {
       root: null,
       rootMargin: '0px',
@@ -56,7 +56,7 @@ const TocListItem = ({ id, value, depth }) => {
     return () => {
       observer.unobserve(e);
     };
-  }, []);
+  }, [dispatch, id]);
 
   return (
     <Link sx={{ textDecoration: 'none' }} key={id} to={id}>
