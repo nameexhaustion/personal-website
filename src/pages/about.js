@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Snackbar from '@mui/material/Snackbar';
+import Tooltip from '@mui/material/Tooltip';
 import MailIcon from '@mui/icons-material/Mail';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -18,17 +19,19 @@ const AboutMeLinks = () => {
 
   return (
     <Stack direction="column" alignItems="start">
-      <Button
-        sx={{ textTransform: 'none', fontWeight: '400' }}
-        size="small"
-        startIcon={<MailIcon />}
-        onClick={() => {
-          navigator.clipboard.writeText('simonlin.rqmmw@slmail.me');
-          setOpen(true);
-        }}
-      >
-        simonlin.rqmmw@slmail.me
-      </Button>
+      <Tooltip title="click to copy">
+        <Button
+          sx={{ textTransform: 'none', fontWeight: '400' }}
+          size="small"
+          startIcon={<MailIcon />}
+          onClick={() => {
+            navigator.clipboard.writeText('simonlin.rqmmw@slmail.me');
+            setOpen(true);
+          }}
+        >
+          simonlin.rqmmw@slmail.me
+        </Button>
+      </Tooltip>
       <Button
         sx={{ textTransform: 'none', fontWeight: '400' }}
         size="small"

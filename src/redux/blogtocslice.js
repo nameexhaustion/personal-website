@@ -4,7 +4,7 @@ export const slice = createSlice({
   name: 'activeHeading',
   initialState: '',
   reducers: {
-    setActiveHeading: (state, action) => {
+    setActiveHeading: (_, action) => {
       return action;
     },
   },
