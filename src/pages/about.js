@@ -10,6 +10,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MailIcon from '@mui/icons-material/Mail';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import BusinessIcon from '@mui/icons-material/Business';
+import BadgeIcon from '@mui/icons-material/Badge';
 import { styled } from '@mui/material/styles';
 import { StaticImage } from 'gatsby-plugin-image';
 import { Helmet } from 'react-helmet';
@@ -61,6 +63,29 @@ const AboutMeLinks = () => {
   );
 };
 
+const CompanyLinks = () => (
+  <Stack direction="column" alignItems="start">
+    <Button
+      sx={{ textTransform: 'none', fontWeight: '400' }}
+      size="small"
+      startIcon={<BusinessIcon />}
+      target="_blank"
+      href="https://www.richdataco.com/"
+    >
+      Rich Data Corporation
+    </Button>
+    <Button
+      sx={{ textTransform: 'none', fontWeight: '400' }}
+      size="small"
+      startIcon={<BadgeIcon />}
+      target="_blank"
+      href="https://www.richdataco.com/"
+    >
+      Trainee Data Scientist
+    </Button>
+  </Stack>
+);
+
 const AboutMe = () => {
   const A = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -100,6 +125,10 @@ const AboutMe = () => {
           Simon Lin
         </Typography>
         <AboutMeLinks />
+        <Typography gutterBottom variant="h6">
+          Company
+        </Typography>
+        <CompanyLinks />
       </Box>
       <Divider
         orientation="vertical"
@@ -115,10 +144,7 @@ const AboutMe = () => {
           • Interested in technology, math, logic, anime and manga
         </Typography>
         <Typography sx={{ marginBottom: 2 }}>
-          • Currently self-studying while working a part-time job
-        </Typography>
-        <Typography sx={{ marginBottom: 2 }}>
-          • Dream job is to be a software developer
+          • Currently employed as a trainee data scientist
         </Typography>
         <Typography sx={{ marginBottom: 2 }}>
           • Always trying to learn more, I never feel like I've learned enough
